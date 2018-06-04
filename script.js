@@ -103,9 +103,72 @@ function createCon(e) {
     var targetNodeObj = nodesObjects[targetNode.id];
 
     //add the target node as output to the source node
-    sourceNodeObj.addOutput(targetNodeObj, 0);
+    sourceNodeObj.addOutput(targetNodeObj);
     // console.log(sourceNodeObj, targetNodeObj);
   }
+  console.log("|Source: Node-"+sourceNodeObj.id + "|\n|Transition: " + (sourceNodeObj.nextOut-1), "|\n|Target: Node-"+targetNodeObj.id+"|");
+
+  createConVis(sourceNode, targetNode, (sourceNodeObj.nextOut-1));
+
   sourceNode = null;
   targetNode = null;
-}
+}//createCon
+
+function createConVis(source, target, transition) {
+  //creates the elements for drawing line
+  var line =  document.createElementNS("http://www.w3.org/2000/svg","line");
+  var graphic = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  var text =  document.createElementNS("http://www.w3.org/2000/svg","text");
+
+  //getting source and target co-ordinates
+  var sourcePos = {
+    x:source.childNodes[0].getAttribute("cx"),
+    y:source.childNodes[0].getAttribute("cy")
+  };
+
+  var targetPos = {
+    x:target.childNodes[0].getAttribute("cx"),
+    y:target.childNodes[0].getAttribute("cy")
+  }
+
+  //setting the line graphics
+  line.setAttribute("x1", sourcePos.x);
+  line.setAttribute("y1", sourcePos.y);
+
+  line.setAttribute("x2", targetPos.x);
+  line.setAttribute("y2", targetPos.y);
+
+  line.setAttribute("stroke", "black");
+  line.setAttribute("marker-end", "url(#arrowhead)");
+
+  //calculate text position
+  var textPos = {
+    x: ((parseInt(sourcePos.x) + parseInt(targetPos.x))/2),
+    y: ((parseInt(sourcePos.y) + parseInt(targetPos.y))/2)
+  }
+
+  //check if a connection between source and target already exists
+  if (document.getElementsByClassName(source.id+target.id).length === 0) {
+
+    //set the visuls and pos of text
+    text.setAttribute("x",textPos.x);
+    text.setAttribute("y",textPos.y);
+    text.innerHTML = transition;
+    text.setAttribute("fill", "black")
+
+    //add line and text to graphic
+    graphic.appendChild(line);
+    graphic.appendChild(text);
+
+    //set the id of the connection graphic as "tr<source>-<transition>-<target>"
+    graphic.setAttribute("id", "tr"+source.id+"-"+transition+"-"+target.id);
+    //set the class of the connection graphic as "<source><target>"
+    graphic.setAttribute("class", source.id+target.id)
+
+    canvas.appendChild(graphic);
+  } else {
+    //find the existing connection and update text field of that connection
+    text = document.getElementsByClassName(source.id+target.id)[0].childNodes[1];
+    text.innerHTML += ","+transition;
+  }
+}//createConVis
