@@ -3,3 +3,4 @@
 * Connection to same node visuals not working
 * Be able to move nodes
   * update the line connections when moving
+* Implement transition box
