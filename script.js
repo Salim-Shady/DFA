@@ -5,8 +5,8 @@ var nodesObjects = [];
 var makeNode = document.getElementById('makeNode');
 createNode(true, 30, 150);
 
-var selectedNode = null;
-var droppedNode = null;
+var sourceNode = null;
+var targetNode = null;
 
 //adds listener to the make node button
 makeNode.addEventListener("click", function() {
@@ -63,12 +63,12 @@ function createNodeVis(node, nodeX, nodeY) {
   graphic.appendChild(text);
   graphic.setAttribute("id", node.id);
 
-  //sets the selectedNode on mouse down
+  //sets the sourceNode on mouse down
   graphic.addEventListener('mousedown', function(e) {
     // console.log(e.ctrlKey);
     e.preventDefault();
     if (!e.ctrlKey) {
-      selectedNode = e.target.parentNode;
+      sourceNode = e.target.parentNode;
     }
   });
 
@@ -94,18 +94,18 @@ function moveNode(nodeH, x, y) {
 //creates connection between two nodes
 function createCon(e) {
   //set the target node
-  droppedNode = e.target.parentNode;
+  targetNode = e.target.parentNode;
 
   //check if both target and source nodes are non-empty
-  if (selectedNode && droppedNode) {
+  if (sourceNode && targetNode) {
     //select the object version of both nodes
-    var selectedNodeObj = nodesObjects[selectedNode.id];
-    var droppedNodeObj = nodesObjects[droppedNode.id];
+    var sourceNodeObj = nodesObjects[sourceNode.id];
+    var targetNodeObj = nodesObjects[targetNode.id];
 
     //add the target node as output to the source node
-    selectedNodeObj.addOutput(droppedNodeObj, 0);
-    // console.log(selectedNodeObj, droppedNodeObj);
+    sourceNodeObj.addOutput(targetNodeObj, 0);
+    // console.log(sourceNodeObj, targetNodeObj);
   }
-  selectedNode = null;
-  droppedNode = null;
+  sourceNode = null;
+  targetNode = null;
 }
