@@ -1,20 +1,15 @@
 class Node {
-  constructor(size, x, y, accepting, id) {
-    this.size = size;
-    this.x = x;
-    this.y = y;
+  constructor(accepting, id) {
     this.accepting = accepting;
-    this.inputs = [];
-    this.outputs = [];
+    // this.inputs = {};
+    this.outputs = {};
     this.id = id;
+    this.nextOut = 0;
   }
 
-  addInput(node) {
-    this.inputs.push(node);
-  }
-
-  removeInput(node) {
-    
+  addOutput(node) {
+    this.outputs[this.nextOut] = node;
+    this.nextOut++;
   }
 
 }
