@@ -6,7 +6,13 @@
   </head>
   <body>
     <button type="button" id="makeNode">Make Node</button>
-    <svg id="canvas" width="300px" height="300px" style="border: 1px black solid">    </svg>
+    <svg id="canvas" width="300px" height="300px" style="border: 1px black solid">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" />
+        </marker>
+      </defs>
+    </svg>
 
     <script src="Node.js" charset="utf-8"></script>
     <script src="script.js" charset="utf-8"></script>
