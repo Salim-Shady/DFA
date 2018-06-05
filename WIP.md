@@ -4,3 +4,5 @@
 * Be able to move nodes
   * update the line connections when moving
 * ~~Implement transition box~~
+* Implement removing transitions
+  * Update mousedown for nodes to detect right click and remove the current selected transition number
