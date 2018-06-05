@@ -4,12 +4,11 @@ class Node {
     // this.inputs = {};
     this.outputs = {};
     this.id = id;
-    this.nextOut = 0;
+    // this.nextOut = 0;
   }
 
-  addOutput(node) {
-    this.outputs[this.nextOut] = node;
-    this.nextOut++;
+  addOutput(node, value) {
+    this.outputs[value] = node;
   }
 
 }
