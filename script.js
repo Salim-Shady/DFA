@@ -8,10 +8,52 @@ createNode(true, 30, 150);
 var sourceNode = null;
 var targetNode = null;
 
+var trBox = document.getElementById('transition-box');
+var trNum = parseInt(document.getElementById('transition-text').innerHTML);
+
+for (var i = 0; i < trBox.childNodes.length; i++) {
+  trBox.childNodes[i].addEventListener('click', function(e) {
+    if (e.ctrlKey) {
+      addTransition(10);
+    } else if (e.shiftKey) {
+      addTransition(5);
+    } else {
+      addTransition(1);
+    }
+  });
+
+  trBox.childNodes[i].addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    if (e.ctrlKey) {
+      subTransition(10);
+    } else if (e.shiftKey) {
+      subTransition(5);
+    } else {
+      subTransition(1);
+    }
+  });
+}
+
 //adds listener to the make node button
 makeNode.addEventListener("click", function() {
   createNode(false);
 });
+
+//increase transition value
+function addTransition(value) {
+  trBox.childNodes[3].innerHTML = trNum + value;
+  console.log("trNum:"+trNum);
+  trNum += value;
+  console.log("New trNum:"+trNum);
+}
+
+//decrease transition value
+function subTransition(value) {
+  trBox.childNodes[3].innerHTML = trNum - value;
+  console.log("trNum:"+trNum);
+  trNum -= value;
+  console.log("New trNum:"+trNum);
+}
 
 //creates a new node
 function createNode(accepting, nodeX, nodeY) {
@@ -102,13 +144,17 @@ function createCon(e) {
     var sourceNodeObj = nodesObjects[sourceNode.id];
     var targetNodeObj = nodesObjects[targetNode.id];
 
-    //add the target node as output to the source node
-    sourceNodeObj.addOutput(targetNodeObj);
+    //checks if the source already has an output with this transition
+    if (!sourceNodeObj.outputs.hasOwnProperty(trNum)) {
+      //add the target node as output to the source node
+      sourceNodeObj.addOutput(targetNodeObj, trNum);
+      createConVis(sourceNode, targetNode, trNum);
+    }
     // console.log(sourceNodeObj, targetNodeObj);
   }
-  console.log("|Source: Node-"+sourceNodeObj.id + "|\n|Transition: " + (sourceNodeObj.nextOut-1), "|\n|Target: Node-"+targetNodeObj.id+"|");
+  console.log(trNum);
+  console.log("|Source: Node-"+sourceNodeObj.id + "|\n|Transition: " + trNum, "|\n|Target: Node-"+targetNodeObj.id+"|");
 
-  createConVis(sourceNode, targetNode, (sourceNodeObj.nextOut-1));
 
   sourceNode = null;
   targetNode = null;
