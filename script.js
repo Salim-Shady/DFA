@@ -11,6 +11,7 @@ var targetNode = null;
 var trBox = document.getElementById('transition-box');
 var trNum = parseInt(document.getElementById('transition-text').innerHTML);
 
+//add listeners for both nodes in the transition box to change value on click
 for (var i = 0; i < trBox.childNodes.length; i++) {
   trBox.childNodes[i].addEventListener('click', function(e) {
     if (e.ctrlKey) {
@@ -109,16 +110,27 @@ function createNodeVis(node, nodeX, nodeY) {
   graphic.addEventListener('mousedown', function(e) {
     // console.log(e.ctrlKey);
     e.preventDefault();
-    if (!e.ctrlKey) {
-      sourceNode = e.target.parentNode;
+    if (e.button === 0) {
+      if (!e.ctrlKey) {
+        sourceNode = e.target.parentNode;
+      }
     }
   });
 
   //creates connection on mouse up with target node
   graphic.addEventListener('mouseup', function(e) {
-    if (!e.ctrlKey) {
+    // console.log(sourceNode);
+    e.preventDefault();
+    //if left click with no ctrl then create connection
+    if (!e.ctrlKey && e.button === 0) {
       createCon(e);
     }
+  });
+
+  graphic.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    //remove connection that is selected by transition number in the transition box
+    removeCon(e.target.parentNode, trNum);
   });
 
   return graphic;
@@ -149,12 +161,10 @@ function createCon(e) {
       //add the target node as output to the source node
       sourceNodeObj.addOutput(targetNodeObj, trNum);
       createConVis(sourceNode, targetNode, trNum);
+      console.log("|Source: Node-"+sourceNodeObj.id + "|\n|Transition: " + trNum, "|\n|Target: Node-"+targetNodeObj.id+"|");
     }
     // console.log(sourceNodeObj, targetNodeObj);
   }
-  console.log(trNum);
-  console.log("|Source: Node-"+sourceNodeObj.id + "|\n|Transition: " + trNum, "|\n|Target: Node-"+targetNodeObj.id+"|");
-
 
   sourceNode = null;
   targetNode = null;
@@ -176,6 +186,7 @@ function createConVis(source, target, transition) {
     x:target.childNodes[0].getAttribute("cx"),
     y:target.childNodes[0].getAttribute("cy")
   }
+
 
   //setting the line graphics
   line.setAttribute("x1", sourcePos.x);
@@ -207,7 +218,7 @@ function createConVis(source, target, transition) {
     graphic.appendChild(text);
 
     //set the id of the connection graphic as "tr<source>-<transition>-<target>"
-    graphic.setAttribute("id", "tr"+source.id+"-"+transition+"-"+target.id);
+    graphic.setAttribute("id", "tr"+source.id+"-"+target.id);
     //set the class of the connection graphic as "<source><target>"
     graphic.setAttribute("class", source.id+target.id)
 
@@ -218,3 +229,58 @@ function createConVis(source, target, transition) {
     text.innerHTML += ","+transition;
   }
 }//createConVis
+
+function removeCon(source, transition) {
+  //get object version of html element
+  var sourceObj = htmlToObj(source);
+  if (!sourceObj.outputs[transition]) {
+    console.log("No "+transition+" transition");
+    return;
+  }
+
+  //get target of the to be deteleted connection and then delete the object connection
+  var target = objToHtml(sourceObj.outputs[transition]);
+  delete sourceObj.outputs[transition];
+
+  console.log("Remove tr: "+transition+"\nFrom:"+source.id+"\nTo:"+target.id);
+
+  //delete the visual connection
+  removeConVis(source, target, transition);
+}//removeCon
+
+function removeConVis(source, target, transition) {
+  //get the line element
+  var edge = document.getElementById('tr'+source.id+"-"+target.id);
+  //check if edge is defined else return
+  if (!edge) {
+    console.log("Invalid parameters");
+    return;
+  }
+
+  var edgeText = edge.childNodes[1].innerHTML;
+  //check if only one transition between nodes
+  if (edgeText.length === 1) {
+    // remove the whole connection
+    canvas.removeChild(edge);
+  } else if (edgeText.includes(transition)){
+    //search for the location of where the transition number appears in text
+    var trLoc = edgeText.search(transition);
+
+    //according to location appropriately remove the number
+    if (trLoc === 0) {
+      edge.childNodes[1].innerHTML = edgeText.slice(2);
+    } else if (trLoc > 0) {
+      var first = edgeText.slice(0, trLoc-1);
+      var last = edgeText.slice(trLoc+1);
+      edge.childNodes[1].innerHTML = first+last;
+    }
+  }
+}//removeConVis
+
+function objToHtml(obj) {
+  return nodesHTML[obj.id];
+}//objToHtml
+
+function  htmlToObj(node) {
+  return nodesObjects[parseInt(node.id)];
+}//htmlToObj
