@@ -7,8 +7,8 @@ class Node {
     // this.nextOut = 0;
   }
 
-  addOutput(node, value) {
-    this.outputs[value] = node;
+  addOutput(node, transition) {
+    this.outputs[transition] = node;
   }
 
 }
