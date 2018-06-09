@@ -3,7 +3,7 @@ var canvas = document.getElementById('canvas');
 var nodesHTML = [];
 var nodesObjects = [];
 var makeNode = document.getElementById('makeNode');
-createNode(true, 30, 150);
+createNode(false, 30, 150);
 
 var sourceNode = null;
 var targetNode = null;
@@ -65,6 +65,18 @@ function createNode(accepting, nodeX, nodeY) {
 
   var nodeVis = createNodeVis(node, nodeX, nodeY);
 
+  nodeVis.addEventListener('contextmenu', function(e) {
+      if (e.ctrlKey){
+        e.preventDefault();
+      node.accepting = !node.accepting;
+      if (node.accepting) {
+        nodeVis.childNodes[0].setAttribute("stroke", "rgba(0,255,0,0.5)");
+      } else {
+        nodeVis.childNodes[0].setAttribute("stroke", "rgba(0,0,0,0.3)");
+      }
+    }
+  });
+
   canvas.appendChild(nodeVis);
 
   //adds to nodes list for html elements
@@ -92,7 +104,8 @@ function createNodeVis(node, nodeX, nodeY) {
   circle.setAttribute("cy", nodeY);
   circle.setAttribute("r", radius);
   circle.setAttribute("fill", "rgba(0,0,0,0.3)");
-  circle.setAttribute("stroke", "");
+  circle.setAttribute("stroke-width", "3");
+  circle.setAttribute("stroke", "rgba(0,0,0,0.3)");
   circle.setAttribute("class", 'draggable');
 
   //text within the node
@@ -130,7 +143,7 @@ function createNodeVis(node, nodeX, nodeY) {
   graphic.addEventListener('contextmenu', function(e) {
     e.preventDefault();
     //remove connection that is selected by transition number in the transition box
-    removeCon(e.target.parentNode, trNum);
+    if (!e.ctrlKey) removeCon(e.target.parentNode, trNum);
   });
 
   return graphic;
