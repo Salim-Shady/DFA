@@ -178,13 +178,13 @@ function createConVis(source, target, transition) {
 
   //getting source and target co-ordinates
   var sourcePos = {
-    x:source.childNodes[0].getAttribute("cx"),
-    y:source.childNodes[0].getAttribute("cy")
+    x:parseInt(source.childNodes[0].getAttribute("cx")),
+    y:parseInt(source.childNodes[0].getAttribute("cy"))
   };
 
   var targetPos = {
-    x:target.childNodes[0].getAttribute("cx"),
-    y:target.childNodes[0].getAttribute("cy")
+    x:parseInt(target.childNodes[0].getAttribute("cx")),
+    y:parseInt(target.childNodes[0].getAttribute("cy"))
   }
 
 
@@ -203,6 +203,20 @@ function createConVis(source, target, transition) {
     x: ((parseInt(sourcePos.x) + parseInt(targetPos.x))/2),
     y: ((parseInt(sourcePos.y) + parseInt(targetPos.y))/2)
   }
+
+  //text adjustment for edges
+  // var anglePos = {
+  //   x: targetPos.x - sourcePos.x,
+  //   y: targetPos.y - sourcePos.y
+  // }
+  //
+  // if (anglePos.x > 0) {
+  //   textPos.y -= 15;
+  // } else if (anglePos.x < 0) {
+  //   textPos.y += 15;
+  // } else {
+  //   textPos.x -= 5;
+  // }
 
   //check if a connection between source and target already exists
   if (document.getElementsByClassName(source.id+target.id).length === 0) {
