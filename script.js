@@ -284,3 +284,33 @@ function objToHtml(obj) {
 function  htmlToObj(node) {
   return nodesObjects[parseInt(node.id)];
 }//htmlToObj
+
+// function calcTextPos(A, B, dist) {
+//   var H = {};
+//
+//   var n = B.y - A.y;
+//   var c = (A.x-B.x)/n;
+//   var k = (((B.x-A.x)*B.x)+((B.y-A.y)*B.y))/n;
+//   k = k-B.y;
+//
+//   var quadX = {
+//     a: 1+c*c,
+//     b: 2*k*c-2*B.x,
+//     c: B.x*B.x+k*k-dist*dist
+//   };
+//
+//   H.x = quadSol(quadX);
+//   H.y = {
+//     pos: k+c*H.x.pos,
+//     neg: k+c*H.x.neg
+//   };
+//
+//   return H;
+// }
+//
+// function quadSol(quad) {
+//   var plus = (-quad.b+Math.sqrt(quad.b*quad.b-4*quad.a*quad.c))/(2*quad.a);
+//   var minus = (-quad.b-Math.sqrt(quad.b*quad.b-4*quad.a*quad.c))/(2*quad.a);
+//
+//   return {pos: plus, neg: minus};
+// }
