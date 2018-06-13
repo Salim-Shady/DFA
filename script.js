@@ -1,4 +1,21 @@
 var canvas = document.getElementById('canvas');
+var bg = document.getElementById('background');
+var bgBounding = bg.getBoundingClientRect();
+
+//implements moving of the nodes
+bg.addEventListener('mouseup', function(e) {
+
+  if (e.ctrlKey && sourceNode) {
+    targetLoc = {
+      x: e.clientX - bgBounding.x,
+      y: e.clientY - bgBounding.y
+    };
+    moveNode(sourceNode, targetLoc.x, targetLoc.y);
+    updateConnections(sourceNode);
+    console.log("Node "+sourceNode.id+" was moved");
+  }
+  sourceNode = null;
+});
 
 var nodesHTML = [];
 var nodesObjects = [];
@@ -7,9 +24,12 @@ createNode(false, 30, 150);
 
 var sourceNode = null;
 var targetNode = null;
+var targetLoc = null;
 
 var trBox = document.getElementById('transition-box');
 var trNum = parseInt(document.getElementById('transition-text').innerHTML);
+
+
 
 //add listeners for both nodes in the transition box to change value on click
 /*
@@ -112,9 +132,7 @@ function addListeners(node, nodeVis) {
     // console.log(e.ctrlKey);
     e.preventDefault();
     if (e.button === 0) {
-      if (!e.ctrlKey) {
-        sourceNode = e.target.parentNode;
-      }
+      sourceNode = e.target.parentNode;
     }
   });
 
@@ -128,6 +146,8 @@ function addListeners(node, nodeVis) {
     }
   });
 
+  sourceNode = null;
+  targetNode = null;
   return nodeVis;
 }
 
@@ -178,6 +198,27 @@ function moveNode(nodeH, x, y) {
   nodeH.childNodes[1].setAttribute("y", y+5);
 }
 
+function updateConnections(node) {
+  var conList = document.querySelectorAll("g[id$='-"+node.id+"']");
+  conList.forEach(function(elem){
+    let line = elem.childNodes[0];
+    let text = elem.childNodes[1];
+
+    line.setAttribute("x2", node.childNodes[0].getAttribute("cx"));
+    line.setAttribute("y2", node.childNodes[0].getAttribute("cy"));
+
+    let textPos = {
+      x: ((parseInt(line.getAttribute("x1")) + parseInt(line.getAttribute("x2")))/2),
+      y: ((parseInt(line.getAttribute("y1")) + parseInt(line.getAttribute("y2")))/2)
+    };
+
+    text.setAttribute("x", textPos.x);
+    text.setAttribute("y", textPos.y);
+
+  });
+  console.log(conList);
+}
+
 //creates connection between two nodes
 function createCon(e) {
   //set the target node
@@ -198,9 +239,6 @@ function createCon(e) {
     }
     // console.log(sourceNodeObj, targetNodeObj);
   }
-
-  sourceNode = null;
-  targetNode = null;
 }//createCon
 
 function createConVis(source, target, transition) {
@@ -218,7 +256,7 @@ function createConVis(source, target, transition) {
   var targetPos = {
     x:parseInt(target.childNodes[0].getAttribute("cx")),
     y:parseInt(target.childNodes[0].getAttribute("cy"))
-  }
+  };
 
 
   //setting the line graphics
