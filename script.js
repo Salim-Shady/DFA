@@ -2,9 +2,10 @@ var canvas = document.getElementById('canvas');
 var bg = document.getElementById('background');
 var bgBounding = bg.getBoundingClientRect();
 
-//implements moving of the nodes
+//implements moving of the nodes on mouseup on the background
 bg.addEventListener('mouseup', function(e) {
 
+  //if control is pressed
   if (e.ctrlKey && sourceNode) {
     targetLoc = {
       x: e.clientX - bgBounding.x,
@@ -199,7 +200,10 @@ function moveNode(nodeH, x, y) {
 }
 
 function updateConnections(node) {
+  //list of all the connections that end in node
   var conList = document.querySelectorAll("g[id$='-"+node.id+"']");
+
+  //iterate through conList and update positions of graphics
   conList.forEach(function(elem){
     let line = elem.childNodes[0];
     let text = elem.childNodes[1];
@@ -216,7 +220,6 @@ function updateConnections(node) {
     text.setAttribute("y", textPos.y);
 
   });
-  console.log(conList);
 }
 
 //creates connection between two nodes
