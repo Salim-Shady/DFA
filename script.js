@@ -12,6 +12,15 @@ var trBox = document.getElementById('transition-box');
 var trNum = parseInt(document.getElementById('transition-text').innerHTML);
 
 //add listeners for both nodes in the transition box to change value on click
+/*
+  L-click         => add 1
+  SHIFT + L-click => add 5
+  CTRL + L-click  => add 10
+
+  R-click         => subtract 1
+  SHIFT + R-click => subtract 5
+  CTRL + R-click  => subtract 10
+*/
 for (var i = 0; i < trBox.childNodes.length; i++) {
   trBox.childNodes[i].addEventListener('click', function(e) {
     if (e.ctrlKey) {
@@ -65,17 +74,7 @@ function createNode(accepting, nodeX, nodeY) {
 
   var nodeVis = createNodeVis(node, nodeX, nodeY);
 
-  nodeVis.addEventListener('contextmenu', function(e) {
-      if (e.ctrlKey){
-        e.preventDefault();
-      node.accepting = !node.accepting;
-      if (node.accepting) {
-        nodeVis.childNodes[0].setAttribute("stroke", "rgba(0,255,0,0.5)");
-      } else {
-        nodeVis.childNodes[0].setAttribute("stroke", "rgba(0,0,0,0.3)");
-      }
-    }
-  });
+  nodeVis = addListeners(node,nodeVis);
 
   canvas.appendChild(nodeVis);
 
@@ -84,7 +83,55 @@ function createNode(accepting, nodeX, nodeY) {
   return node;
 }//createNode
 
-//creates the graphics for the node
+
+//adds the listeners to the node visuals
+/*
+  R-click on node => removes transition viewed in transition box
+  CTRL + R-click on node => change accepting state
+  MouseDown => select as source node
+  MouseUp => select as target node
+*/
+function addListeners(node, nodeVis) {
+  //changes accepting states on right click
+  nodeVis.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    if (e.ctrlKey){
+      node.accepting = !node.accepting;
+      if (node.accepting) {
+        nodeVis.childNodes[0].setAttribute("stroke", "rgba(0,255,0,0.5)");
+      } else {
+        nodeVis.childNodes[0].setAttribute("stroke", "rgba(0,0,0,0.3)");
+      }
+    } else {
+      removeCon(e.target.parentNode, trNum);
+    }
+  });
+
+  //sets the sourceNode on mouse down
+  nodeVis.addEventListener('mousedown', function(e) {
+    // console.log(e.ctrlKey);
+    e.preventDefault();
+    if (e.button === 0) {
+      if (!e.ctrlKey) {
+        sourceNode = e.target.parentNode;
+      }
+    }
+  });
+
+  //creates connection on mouse up with target node
+  nodeVis.addEventListener('mouseup', function(e) {
+    // console.log(sourceNode);
+    e.preventDefault();
+    //if left click with no ctrl then create connection
+    if (!e.ctrlKey && e.button === 0) {
+      createCon(e);
+    }
+  });
+
+  return nodeVis;
+}
+
+//creates the graphics for the node and listerners for the node graphics
 function createNodeVis(node, nodeX, nodeY) {
   var radius = 20;
 
@@ -118,33 +165,6 @@ function createNodeVis(node, nodeX, nodeY) {
   graphic.appendChild(circle);
   graphic.appendChild(text);
   graphic.setAttribute("id", node.id);
-
-  //sets the sourceNode on mouse down
-  graphic.addEventListener('mousedown', function(e) {
-    // console.log(e.ctrlKey);
-    e.preventDefault();
-    if (e.button === 0) {
-      if (!e.ctrlKey) {
-        sourceNode = e.target.parentNode;
-      }
-    }
-  });
-
-  //creates connection on mouse up with target node
-  graphic.addEventListener('mouseup', function(e) {
-    // console.log(sourceNode);
-    e.preventDefault();
-    //if left click with no ctrl then create connection
-    if (!e.ctrlKey && e.button === 0) {
-      createCon(e);
-    }
-  });
-
-  graphic.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    //remove connection that is selected by transition number in the transition box
-    if (!e.ctrlKey) removeCon(e.target.parentNode, trNum);
-  });
 
   return graphic;
 }
