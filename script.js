@@ -27,8 +27,8 @@ var sourceNode = null;
 var targetNode = null;
 var targetLoc = null;
 
-var trBox = document.getElementById('transition-box');
-var trNum = parseInt(document.getElementById('transition-text').innerHTML);
+var trBox = document.getElementById('Numtransition-box');
+var trNum = parseInt(document.getElementById('Numtransition-text').innerHTML);
 
 
 
@@ -387,6 +387,23 @@ function objToHtml(obj) {
 function  htmlToObj(node) {
   return nodesObjects[parseInt(node.id)];
 }//htmlToObj
+
+function clearAll() {
+  console.log("Clearing Nodes...");
+  for (var i = nodesHTML.length-1; i > 0; i--) {
+    canvas.removeChild(nodesHTML[i]);
+    nodesHTML.pop();
+    nodesObjects.pop();
+  }
+
+  console.log("Clearing Connections...");
+  let connections = document.querySelectorAll("g[id^='tr']");
+  connections.forEach(function(elem) {
+    canvas.removeChild(elem);
+  });
+
+  nodesObjects[0].outputs = {};
+}
 
 // function calcTextPos(A, B, dist) {
 //   var H = {};
