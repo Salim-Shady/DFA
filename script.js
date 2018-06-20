@@ -45,8 +45,6 @@ var trNum = parseInt(document.getElementById('transition-text').innerHTML);
 for (var i = 0; i < trBox.childNodes.length; i++) {
   trBox.childNodes[i].addEventListener('click', function(e) {
     if (e.ctrlKey) {
-      addTransition(10);
-    } else if (e.shiftKey) {
       addTransition(5);
     } else {
       addTransition(1);
@@ -56,8 +54,6 @@ for (var i = 0; i < trBox.childNodes.length; i++) {
   trBox.childNodes[i].addEventListener('contextmenu', function(e) {
     e.preventDefault();
     if (e.ctrlKey) {
-      subTransition(10);
-    } else if (e.shiftKey) {
       subTransition(5);
     } else {
       subTransition(1);
@@ -72,18 +68,18 @@ makeNode.addEventListener("click", function() {
 
 //increase transition value
 function addTransition(value) {
-  trBox.childNodes[3].innerHTML = trNum + value;
-  console.log("trNum:"+trNum);
-  trNum += value;
-  console.log("New trNum:"+trNum);
+  let prevTrNum = trNum;
+  trNum = trNum+value >= 10 ? 9 : trNum + value;
+  console.log("TrNum "+prevTrNum+"-->"+trNum);
+  trBox.childNodes[3].innerHTML = trNum;
 }
 
 //decrease transition value
 function subTransition(value) {
-  trBox.childNodes[3].innerHTML = trNum - value;
-  console.log("trNum:"+trNum);
-  trNum -= value;
-  console.log("New trNum:"+trNum);
+  let prevTrNum = trNum;
+  trNum = trNum-value < 0 ? 0 : trNum - value;
+  console.log("TrNum "+prevTrNum+"-->"+trNum);
+  trBox.childNodes[3].innerHTML = trNum;
 }
 
 //creates a new node
