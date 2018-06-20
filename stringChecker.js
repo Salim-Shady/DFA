@@ -1,22 +1,16 @@
 var input = document.getElementById('inputString');
 var error = document.getElementById('error');
 
-input.addEventListener('keydown', function(e) {
-  if (e.keyCode === 116) {
-    input.value = "";
-    return
-  }
-
-  if (e.keyCode !== 8 && isNaN(e.key)) {
-    e.preventDefault();
-    error.innerHTML = "Only numbers allowed";
+document.getElementById('check').addEventListener('click', function(e) {
+  if (check(nodesObjects[0], input.value)) {
+    input.style = "border: 2px solid green";
   } else {
-    error.innerHTML = check(nodesObjects[0],input.innerHTML);
+    input.style = "border: 2px solid red";
   }
 });
 
 
-
+//checks if the string will be accepted by node
 function check(node, string) {
   if (string.length === 0) return node.accepting;
   else {
