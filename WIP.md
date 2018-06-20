@@ -9,4 +9,5 @@
 * Text positioning for transitions
   * Rotate to fit the gradient of the line
   * Go above or below the line to differentiate direction of edge
-* Implement checking strings against DFA
+* ~~Implement checking strings against DFA~~
+* Beautify
