@@ -7,7 +7,7 @@
   </head>
   <body>
     <button type="button" id="makeNode">Make Node</button>
-    <button type="button" id="clearAll">Clear All</button>
+    <button type="button" id="clearAll" onclick="clearAll()">Clear All</button>
     <svg id="canvas" width="300px" height="300px" style="border: 1px black solid">
       <defs>
         <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -15,9 +15,9 @@
         </marker>
       </defs>
       <rect id="background" fill="white" width="300px" height="300px" x="0" y="0"></rect>
-      <g id="transition-box">
+      <g id="Numtransition-box">
         <rect x="265" width="35" height="45" style="fill:rgb(255,255,255);stroke-width:3;stroke:rgb(0,0,0)" />
-        <text x="280" y="25" fill="black" id="transition-text">0</text>
+        <text x="280" y="25" fill="black" id="Numtransition-text">0</text>
       </g>
     </svg>
 
