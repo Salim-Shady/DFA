@@ -11,3 +11,6 @@
   * Go above or below the line to differentiate direction of edge
 * ~~Implement checking strings against DFA~~
 * Beautify
+* Implement removing individual nodes
+  * remove all connection from node
+  * remove node
