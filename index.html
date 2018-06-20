@@ -30,45 +30,6 @@
     <script src="Node.js" charset="utf-8"></script>
     <script src="script.js" charset="utf-8"></script>
     <script src="stringChecker.js" charset="utf-8"></script>
-    <script>
-
-      let container = document.getElementById('container');
-      container.style.display = "inline-block";
-      container.style.position = "absolute";
-
-      window.onresize = function() {
-        let containerBound = container.getBoundingClientRect();
-        let center = containerBound.width/2;
-
-        let bodyWidth = window.innerWidth;
-        let offset =  (bodyWidth/2) - center;
-
-        console.log("containerBound", containerBound);
-        console.log("center", center);
-        console.log("bodyWidth", bodyWidth);
-        console.log("offset", offset);
-        // if (offset < 0) return;
-        container.style.left = offset+"px";
-      }
-
-      function resize() {
-
-        let containerBound = container.getBoundingClientRect();
-        let center = containerBound.width/2;
-
-        let bodyWidth = window.innerWidth;
-        let offset =  (bodyWidth/2) - center;
-
-        console.log("containerBound", containerBound);
-        console.log("center", center);
-        console.log("bodyWidth", bodyWidth);
-        console.log("offset", offset);
-        // if (offset < 0) return;
-        container.style.left = offset+"px";
-      }
-
-      resize();
-
-    </script>
+    <script src="centerDiv.js" charset="utf-8"></script>
   </body>
 </html>
