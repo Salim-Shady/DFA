@@ -105,8 +105,8 @@ function createNode(accepting, nodeX, nodeY) {
 /*
   R-click on node => removes transition viewed in transition box
   CTRL + R-click on node => change accepting state
-  MouseDown => select as source node
-  MouseUp => select as target node
+  MouseDown              => select as source node
+  MouseUp                => select as target node
 */
 function addListeners(node, nodeVis) {
   //changes accepting states on right click
@@ -197,15 +197,34 @@ function moveNode(nodeH, x, y) {
 
 function updateConnections(node) {
   //list of all the connections that end in node
-  var conList = document.querySelectorAll("g[id$='-"+node.id+"']");
+  var toConns = document.querySelectorAll("g[id$='-"+node.id+"']");
+  var fromConns = document.querySelectorAll("g[id^='tr"+node.id+"-']");
 
-  //iterate through conList and update positions of graphics
-  conList.forEach(function(elem){
+  //iterate through toConns and update positions of graphics with arrows to the node
+  toConns.forEach(function(elem){
     let line = elem.childNodes[0];
     let text = elem.childNodes[1];
 
     line.setAttribute("x2", node.childNodes[0].getAttribute("cx"));
     line.setAttribute("y2", node.childNodes[0].getAttribute("cy"));
+
+    let textPos = {
+      x: ((parseInt(line.getAttribute("x1")) + parseInt(line.getAttribute("x2")))/2),
+      y: ((parseInt(line.getAttribute("y1")) + parseInt(line.getAttribute("y2")))/2)
+    };
+
+    text.setAttribute("x", textPos.x);
+    text.setAttribute("y", textPos.y);
+
+  });
+
+  //iterate through fromConns and update positions of graphics with arrows from the node
+  fromConns.forEach(function(elem){
+    let line = elem.childNodes[0];
+    let text = elem.childNodes[1];
+
+    line.setAttribute("x1", node.childNodes[0].getAttribute("cx"));
+    line.setAttribute("y1", node.childNodes[0].getAttribute("cy"));
 
     let textPos = {
       x: ((parseInt(line.getAttribute("x1")) + parseInt(line.getAttribute("x2")))/2),
