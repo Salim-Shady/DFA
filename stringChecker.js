@@ -1,6 +1,7 @@
 var input = document.getElementById('inputString');
 var error = document.getElementById('error');
 
+//listener for when check button is clicked
 document.getElementById('check').addEventListener('click', function(e) {
   if (check(nodesObjects[0], input.value)) {
     input.style = "border: 2px solid green";
@@ -14,6 +15,7 @@ document.getElementById('check').addEventListener('click', function(e) {
 function check(node, string) {
   if (string.length === 0) return node.accepting;
   else {
+    //check if next node exists
     if (!node.outputs[parseInt(string[0])]) {
       return false;
     } else {
