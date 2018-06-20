@@ -1,9 +1,9 @@
 var canvas = document.getElementById('canvas');
 var bg = document.getElementById('background');
-var bgBounding = bg.getBoundingClientRect();
 
 //implements moving of the nodes on mouseup on the background
 bg.addEventListener('mouseup', function(e) {
+  var bgBounding = bg.getBoundingClientRect();
 
   //if control is pressed
   if (e.ctrlKey && sourceNode) {
