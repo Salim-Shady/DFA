@@ -21,7 +21,9 @@ bg.addEventListener('mouseup', function(e) {
 var nodesHTML = [];
 var nodesObjects = [];
 var makeNode = document.getElementById('makeNode');
-createNode(false, 30, 150);
+
+//creates initial node
+createNode(false, 30, parseInt(canvas.getAttribute("height"))/2);
 
 var sourceNode = null;
 var targetNode = null;
