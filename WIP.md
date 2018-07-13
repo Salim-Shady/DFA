@@ -1,6 +1,6 @@
 # To work on:
 * Two way connections have overlaps in connection number text
-* Connection to same node visuals not working
+* Connection to same node visuals are weird
 * ~~Be able to move nodes~~
   * ~~update the line connections when moving~~
 * ~~Implement transition box~~
@@ -11,6 +11,8 @@
   * Go above or below the line to differentiate direction of edge
 * ~~Implement checking strings against DFA~~
 * Beautify
-* Implement removing individual nodes
-  * remove all connection from node
-  * remove node
+* ~~Implement removing individual nodes~~
+  * ~~remove all connection from node~~
+  * ~~remove node~~
+* Implement removing nodes with connections
+* Finish instructions as a modal with help button
