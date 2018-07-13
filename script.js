@@ -38,12 +38,10 @@ var trNum = parseInt(document.getElementById('Numtransition-text').innerHTML);
 /*
   L-click         => add 1
   SHIFT + L-click => add 5
-  CTRL + L-click  => add 10
 
   R-click         => subtract 1
   SHIFT + R-click => subtract 5
-  CTRL + R-click  => subtract 10
-*/
+  */
 for (var i = 0; i < trBox.childNodes.length; i++) {
   trBox.childNodes[i].addEventListener('click', function(e) {
     if (e.ctrlKey) {
@@ -105,7 +103,7 @@ function createNode(accepting, nodeX, nodeY) {
 
 //adds the listeners to the node visuals
 /*
-  R-click on node => removes transition viewed in transition box
+  R-click on node        => removes transition viewed in transition box
   CTRL + R-click on node => change accepting state
   MouseDown              => select as source node
   MouseUp                => select as target node
@@ -114,13 +112,16 @@ function addListeners(node, nodeVis) {
   //changes accepting states on right click
   nodeVis.addEventListener('contextmenu', function(e) {
     e.preventDefault();
-    if (e.ctrlKey){
+    console.log(e);
+    if (e.ctrlKey) {
       node.accepting = !node.accepting;
       if (node.accepting) {
         nodeVis.childNodes[0].setAttribute("stroke", "rgba(0,255,0,0.5)");
       } else {
         nodeVis.childNodes[0].setAttribute("stroke", "rgba(0,0,0,0.3)");
       }
+    } else if (e.altKey) {
+      removeNode(e.target.parentNode);
     } else {
       removeCon(e.target.parentNode, trNum);
     }
@@ -197,6 +198,7 @@ function moveNode(nodeH, x, y) {
   nodeH.childNodes[1].setAttribute("y", y+5);
 }
 
+//updates all the visuals for coonnections to node
 function updateConnections(node) {
   //list of all the connections that end in node
   var toConns = document.querySelectorAll("g[id$='-"+node.id+"']");
@@ -337,6 +339,7 @@ function createConVis(source, target, transition) {
 
 function removeCon(source, transition) {
   //get object version of html element
+  transition = parseInt(transition);
   var sourceObj = htmlToObj(source);
   if (!sourceObj.outputs[transition]) {
     console.log("No "+transition+" transition");
@@ -406,6 +409,34 @@ function clearAll() {
 
   nodesObjects[0].outputs = {};
 }
+
+function removeNode(nodeH) {
+  let nodeObj = htmlToObj(nodeH);
+  let nodeIndex = nodesObjects.indexOf(nodeObj);
+  let toConns = document.querySelectorAll("g[id$='-"+nodeH.id+"']");
+  let fromConns = document.querySelectorAll("g[id^='tr"+nodeH.id+"-']");
+
+  if (nodeIndex === 0) {
+    console.log("Cannot remove the initial node");
+    return;
+  } else if (toConns.length > 0 || fromConns.length > 0) {
+    console.log("Cannot remove node with active connections");
+    return;
+  }
+
+  updateConnections(nodeH);
+  removeNodeVis(nodeH);
+
+  nodesObjects[nodeIndex] = null;
+  nodesHTML[nodeIndex] = null;
+
+  console.log("Removing Node "+nodeIndex);
+}
+
+function removeNodeVis(nodeH) {
+  nodeH.remove();
+}
+
 
 // function calcTextPos(A, B, dist) {
 //   var H = {};
